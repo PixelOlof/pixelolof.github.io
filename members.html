@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PixelOlof | Medlemmar</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#050505;
+  color:white;
+  min-height:100vh;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(
+    circle at 50% 10%,
+    rgba(255,0,0,.16),
+    transparent 40%
+  );
+  z-index:-1;
+}
+
+nav{
+  position:fixed;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  width:92%;
+  max-width:1100px;
+  padding:14px 20px;
+  border:1px solid #292929;
+  border-radius:18px;
+  background:rgba(10,10,10,.9);
+  backdrop-filter:blur(15px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:10;
+}
+
+.logo{
+  color:#ff2020;
+  font-size:21px;
+  font-weight:900;
+  text-shadow:0 0 15px rgba(255,0,0,.7);
+}
+
+nav a{
+  color:#ddd;
+  text-decoration:none;
+  font-weight:bold;
+  padding:10px;
+}
+
+nav a:hover{
+  color:#ff3030;
+}
+
+.container{
+  width:min(600px,92%);
+  margin:auto;
+  padding:150px 0 70px;
+}
+
+h1{
+  text-align:center;
+  font-size:52px;
+  color:#fff;
+  text-shadow:0 0 35px rgba(255,0,0,.3);
+}
+
+.subtitle{
+  text-align:center;
+  color:#999;
+  margin:15px 0 35px;
+  line-height:1.6;
+}
+
+.card{
+  background:linear-gradient(145deg,#121212,#090909);
+  border:1px solid #292929;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 0 35px rgba(255,0,0,.08);
+}
+
+h2{
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #3a3a3a;
+  background:#070707;
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#ff2020;
+  box-shadow:0 0 12px rgba(255,0,0,.15);
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border:0;
+  border-radius:10px;
+  background:#e50909;
+  color:white;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#ff2525;
+}
+
+.status{
+  text-align:center;
+  color:#aaa;
+  margin-top:15px;
+}
+
+.extra{
+  display:none;
+}
+
+.welcome{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.member-box{
+  background:#090909;
+  border:1px solid #292929;
+  border-radius:15px;
+  padding:22px;
+  margin-top:15px;
+}
+
+.member-box h3{
+  color:#ff3030;
+  margin-bottom:10px;
+}
+
+.feature{
+  padding:15px 0;
+  border-bottom:1px solid #222;
+}
+
+.feature:last-child{
+  border-bottom:0;
+}
+
+.logout{
+  background:#171717;
+  border:1px solid #333;
+}
+
+footer{
+  text-align:center;
+  color:#555;
+  padding:40px 20px;
+}
+
+footer strong{
+  color:#ff3030;
+}
+
+@media(max-width:600px){
+  h1{
+    font-size:40px;
+  }
+
+  .container{
+    padding-top:130px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">PIXELOLOF</div>
+  <a href="index.html">← Till hemsidan</a>
+</nav>
+
+<div class="container">
+
+<h1>🔐 MEDLEMMAR</h1>
+
+<p class="subtitle">
+  Detta är PixelOlofs exklusiva medlemssida.
+  Logga in med ditt användarnamn och din medlemskod.
+</p>
+
+<!-- LOGIN -->
+
+<div id="loginCard" class="card">
+
+<h2>Medlemsinloggning</h2>
+
+<input
+  id="username"
+  type="text"
+  placeholder="Användarnamn">
+
+<input
+  id="code"
+  type="password"
+  placeholder="Medlemskod">
+
+<button onclick="login()">
+  LOGGA IN
+</button>
+
+<div id="status" class="status"></div>
+
+</div>
+
+
+<!-- MEMBER CONTENT -->
+
+<div id="memberContent" class="extra">
+
+<div class="card">
+
+<div class="welcome">
+
+<h2>🎉 Välkommen!</h2>
+
+<p>
+Du är nu inloggad som medlem i PixelOlofs community.
+</p>
+
+</div>
+
+<div class="member-box">
+
+<h3>⭐ Medlemsförmåner</h3>
+
+<div class="feature">
+🔴 Exklusivt PixelOlof-innehåll
+</div>
+
+<div class="feature">
+🎮 Medlemscommunity
+</div>
+
+<div class="feature">
+💬 Exklusiva community-områden
+</div>
+
+<div class="feature">
+🎁 Framtida medlemsbonusar
+</div>
+
+</div>
+
+<button class="logout" onclick="logout()">
+LOGGA UT
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+© 2026 <strong>PixelOlof</strong> — Members
+</footer>
+
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCtVV5fDpqiL-emhQ75yD_dTZtkhbYZCzk",
+  authDomain: "pixelolof.firebaseapp.com",
+  projectId: "pixelolof",
+  storageBucket: "pixelolof.firebasestorage.app",
+  messagingSenderId: "463793218153",
+  appId: "1:463793218153:web:3b71016614d4aa9347b8f8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+window.login = async function(){
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const code =
+    document.getElementById("code").value.trim();
+
+  const status =
+    document.getElementById("status");
+
+  if(!username || !code){
+
+    status.textContent =
+      "Fyll i användarnamn och kod.";
+
+    return;
+  }
+
+  status.textContent = "Kontrollerar...";
+
+  try{
+
+    const snapshot =
+      await getDocs(collection(db,"members"));
+
+    let found = false;
+
+    snapshot.forEach(doc => {
+
+      const data = doc.data();
+
+      if(
+        data.username === username &&
+        data.code === code &&
+        data.active === true
+      ){
+
+        found = true;
+
+      }
+
+    });
+
+    if(found){
+
+      document
+        .getElementById("loginCard")
+        .style.display = "none";
+
+      document
+        .getElementById("memberContent")
+        .style.display = "block";
+
+    }else{
+
+      status.textContent =
+        "❌ Fel användarnamn eller medlemskod.";
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent =
+      "❌ Kunde inte ansluta till medlemsdatabasen.";
+
+  }
+
+};
+
+
+window.logout = function(){
+
+  document
+    .getElementById("memberContent")
+    .style.display = "none";
+
+  document
+    .getElementById("loginCard")
+    .style.display = "block";
+
+  document.getElementById("username").value = "";
+  document.getElementById("code").value = "";
+
+};
+
+</script>
+
+</body>
+</html>
