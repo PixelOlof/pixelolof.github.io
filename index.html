@@ -4,1188 +4,612 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PixelOlof — Official</title>
-
-<meta name="description"
-content="PixelOlof Official — Gaming, Minecraft och community.">
+<title>PixelOlof | Official Website</title>
 
 <style>
-
-/* =====================================================
-   RESET
-===================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-html {
-    scroll-behavior: smooth;
+html{
+  scroll-behavior:smooth;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #050505;
-    color: white;
-    overflow-x: hidden;
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
 }
 
-/* =====================================================
-   BACKGROUND
-===================================================== */
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-
-    background-size: 45px 45px;
-
-    pointer-events: none;
-
-    z-index: -3;
+/* BACKGROUND */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(255,0,0,.16),transparent 35%),
+    radial-gradient(circle at 10% 80%,rgba(255,0,0,.08),transparent 30%);
+  z-index:-1;
 }
 
-body::after {
-    content: "";
-
-    position: fixed;
-
-    width: 700px;
-    height: 700px;
-
-    left: 50%;
-    top: -350px;
-
-    transform: translateX(-50%);
-
-    background: rgba(255,0,0,.13);
-
-    filter: blur(150px);
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: -2;
+/* NAVBAR */
+nav{
+  position:fixed;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  width:92%;
+  max-width:1100px;
+  padding:14px 20px;
+  border:1px solid #292929;
+  border-radius:18px;
+  background:rgba(10,10,10,.88);
+  backdrop-filter:blur(15px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:1000;
+  box-shadow:0 0 30px rgba(255,0,0,.08);
 }
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-nav {
-
-    position: fixed;
-
-    top: 15px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: min(1150px, 92%);
-
-    height: 65px;
-
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 0 24px;
-
-    background: rgba(12,12,12,.75);
-
-    backdrop-filter: blur(20px);
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    border-radius: 18px;
-
-    z-index: 1000;
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,.35);
+.logo{
+  font-size:21px;
+  font-weight:900;
+  color:#ff2020;
+  text-shadow:0 0 15px rgba(255,0,0,.7);
 }
 
-.logo {
-
-    font-size: 23px;
-
-    font-weight: 1000;
-
-    letter-spacing: -1px;
+.navlinks{
+  display:flex;
+  gap:8px;
 }
 
-.logo span {
-    color: #ff0000;
+.navlinks a{
+  color:#ddd;
+  text-decoration:none;
+  padding:10px 13px;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:14px;
 }
 
-.nav-links {
-
-    display: flex;
-
-    gap: 28px;
+.navlinks a:hover{
+  background:#1a1a1a;
+  color:#ff3030;
 }
 
-.nav-links a {
-
-    color: #999;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    transition: .25s;
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:120px 20px 80px;
 }
 
-.nav-links a:hover {
-
-    color: white;
-
-    text-shadow:
-        0 0 15px rgba(255,0,0,.8);
+.hero-content{
+  max-width:850px;
 }
 
-/* =====================================================
-   HERO
-===================================================== */
-
-.hero {
-
-    min-height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 130px 20px 70px;
-
-    position: relative;
-
-    overflow: hidden;
+.badge{
+  display:inline-block;
+  border:1px solid #4a4a4a;
+  background:#101010;
+  padding:9px 16px;
+  border-radius:999px;
+  color:#bbb;
+  font-size:13px;
+  letter-spacing:2px;
+  margin-bottom:25px;
 }
 
-.hero::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 500px;
-    height: 500px;
-
-    border: 1px solid rgba(255,0,0,.12);
-
-    border-radius: 50%;
-
-    animation: spin 25s linear infinite;
+.hero h1{
+  font-size:clamp(55px,12vw,125px);
+  line-height:.9;
+  font-weight:1000;
+  letter-spacing:-6px;
+  color:white;
+  text-shadow:
+    0 0 10px rgba(255,255,255,.15),
+    0 0 40px rgba(255,0,0,.25);
 }
 
-.hero::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 700px;
-    height: 700px;
-
-    border: 1px solid rgba(255,0,0,.06);
-
-    border-radius: 50%;
-
-    animation: spinReverse 35s linear infinite;
+.hero h1 span{
+  color:#ff2020;
 }
 
-@keyframes spin {
-
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+.hero p{
+  margin:30px auto;
+  max-width:600px;
+  color:#aaa;
+  font-size:18px;
+  line-height:1.7;
 }
 
-@keyframes spinReverse {
-
-    from {
-        transform: rotate(360deg);
-    }
-
-    to {
-        transform: rotate(0deg);
-    }
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.hero-content {
-
-    position: relative;
-
-    z-index: 5;
-
-    max-width: 950px;
+.btn{
+  display:inline-block;
+  text-decoration:none;
+  padding:15px 24px;
+  border-radius:12px;
+  font-weight:900;
+  transition:.2s;
 }
 
-/* =====================================================
-   BADGE
-===================================================== */
-
-.badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 9px 16px;
-
-    border-radius: 50px;
-
-    background: rgba(255,0,0,.06);
-
-    border: 1px solid rgba(255,0,0,.3);
-
-    color: #ff5555;
-
-    font-size: 12px;
-
-    font-weight: bold;
-
-    margin-bottom: 28px;
-
-    box-shadow:
-        0 0 25px rgba(255,0,0,.08);
+.btn-red{
+  background:#e50909;
+  color:white;
+  box-shadow:0 0 25px rgba(255,0,0,.25);
 }
 
-.dot {
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: #ff0000;
-
-    box-shadow:
-        0 0 12px #ff0000;
-
-    animation: pulse 1.5s infinite;
+.btn-red:hover{
+  background:#ff2424;
+  transform:translateY(-2px);
 }
 
-@keyframes pulse {
-
-    0%,100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: .4;
-        transform: scale(.7);
-    }
+.btn-dark{
+  background:#111;
+  border:1px solid #333;
+  color:white;
 }
 
-/* =====================================================
-   MAIN TITLE
-===================================================== */
-
-.hero h1 {
-
-    font-size: clamp(65px, 14vw, 155px);
-
-    line-height: .82;
-
-    letter-spacing: -9px;
-
-    font-weight: 1000;
-
-    text-transform: uppercase;
+.btn-dark:hover{
+  border-color:#ff3030;
+  color:#ff3030;
 }
 
-.hero h1 span {
-
-    color: #ff0000;
-
-    text-shadow:
-        0 0 15px rgba(255,0,0,.9),
-        0 0 45px rgba(255,0,0,.55),
-        0 0 100px rgba(255,0,0,.2);
+/* SECTIONS */
+section{
+  width:min(1100px,92%);
+  margin:auto;
+  padding:90px 0;
 }
 
-.hero-subtitle {
-
-    margin: 35px auto;
-
-    max-width: 620px;
-
-    color: #8b8b8b;
-
-    font-size: 18px;
-
-    line-height: 1.7;
+.section-title{
+  text-align:center;
+  margin-bottom:45px;
 }
 
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-.buttons {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 13px;
-
-    flex-wrap: wrap;
+.section-title small{
+  color:#ff3030;
+  font-weight:bold;
+  letter-spacing:3px;
 }
 
-.btn {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    padding: 16px 25px;
-
-    border-radius: 12px;
-
-    text-decoration: none;
-
-    font-weight: 900;
-
-    font-size: 14px;
-
-    transition: .25s;
+.section-title h2{
+  font-size:42px;
+  margin-top:10px;
 }
 
-.btn-red {
-
-    color: white;
-
-    background: #ff0000;
-
-    box-shadow:
-        0 10px 35px rgba(255,0,0,.3);
+/* CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
 }
 
-.btn-dark {
-
-    color: white;
-
-    background: rgba(255,255,255,.04);
-
-    border: 1px solid rgba(255,255,255,.12);
-
-    backdrop-filter: blur(10px);
+.card{
+  background:linear-gradient(145deg,#121212,#090909);
+  border:1px solid #292929;
+  border-radius:20px;
+  padding:30px;
+  min-height:190px;
+  transition:.25s;
 }
 
-.btn:hover {
-
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 15px 40px rgba(255,0,0,.3);
+.card:hover{
+  transform:translateY(-5px);
+  border-color:#ff3030;
+  box-shadow:0 15px 40px rgba(255,0,0,.1);
 }
 
-/* =====================================================
-   SCROLL
-===================================================== */
-
-.scroll {
-
-    position: absolute;
-
-    bottom: 25px;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    color: #444;
-
-    font-size: 10px;
-
-    letter-spacing: 3px;
+.icon{
+  font-size:34px;
+  margin-bottom:20px;
 }
 
-/* =====================================================
-   SECTIONS
-===================================================== */
-
-section {
-
-    width: min(1100px, 92%);
-
-    margin: auto;
-
-    padding: 120px 0;
+.card h3{
+  margin-bottom:12px;
+  font-size:22px;
 }
 
-.section-heading {
-
-    text-align: center;
-
-    margin-bottom: 55px;
+.card p{
+  color:#999;
+  line-height:1.6;
 }
 
-.section-heading h2 {
-
-    font-size: 43px;
-
-    letter-spacing: -1px;
-
-    margin-bottom: 12px;
+/* MINECRAFT */
+.minecraft{
+  position:relative;
+  overflow:hidden;
+  border-radius:25px;
+  padding:55px 35px;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.85)),
+    repeating-linear-gradient(
+      45deg,
+      #111 0,
+      #111 10px,
+      #151515 10px,
+      #151515 20px
+    );
+  border:1px solid #333;
+  text-align:center;
 }
 
-.section-heading p {
-
-    color: #666;
-
-    font-size: 15px;
+.minecraft h2{
+  font-size:40px;
+  margin-bottom:15px;
 }
 
-/* =====================================================
-   ABOUT
-===================================================== */
-
-.about {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 20px;
+.minecraft p{
+  color:#aaa;
+  max-width:650px;
+  margin:0 auto 25px;
+  line-height:1.7;
 }
 
-.about-card {
-
-    padding: 40px;
-
-    border-radius: 25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.055),
-            rgba(255,255,255,.015)
-        );
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    backdrop-filter: blur(15px);
-
-    transition: .3s;
+/* YOUTUBE */
+.youtube{
+  text-align:center;
+  background:#0d0d0d;
+  border:1px solid #292929;
+  border-radius:25px;
+  padding:50px 25px;
 }
 
-.about-card:hover {
-
-    border-color: rgba(255,0,0,.35);
-
-    transform: translateY(-6px);
+.youtube h2{
+  font-size:36px;
+  margin-bottom:15px;
 }
 
-.about-card h3 {
-
-    font-size: 27px;
-
-    margin-bottom: 15px;
+.youtube p{
+  color:#999;
+  margin-bottom:25px;
 }
 
-.about-card p {
-
-    color: #888;
-
-    line-height: 1.8;
+/* CHAT */
+.chat-button{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:27px;
+  background:#e50909;
+  color:white;
+  box-shadow:0 0 30px rgba(255,0,0,.45);
+  z-index:999;
+  transition:.2s;
 }
 
-/* =====================================================
-   MINECRAFT CARD
-===================================================== */
-
-.minecraft-card {
-
-    position: relative;
-
-    overflow: hidden;
-
-    min-height: 280px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #151515,
-            #090909
-        );
+.chat-button:hover{
+  transform:scale(1.08);
+  background:#ff2525;
 }
 
-.minecraft-card::before {
-
-    content: "⛏";
-
-    position: absolute;
-
-    right: -15px;
-    bottom: -45px;
-
-    font-size: 210px;
-
-    opacity: .035;
-
-    transform: rotate(-15deg);
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:50px 20px;
+  border-top:1px solid #1c1c1c;
+  color:#666;
 }
 
-.minecraft-card .minecraft-icon {
-
-    font-size: 45px;
-
-    margin-bottom: 20px;
+footer strong{
+  color:#ff3030;
 }
 
-/* =====================================================
-   FEATURES
-===================================================== */
+/* MOBILE */
+@media(max-width:750px){
 
-.features {
+  nav{
+    padding:12px;
+  }
 
-    display: grid;
+  .logo{
+    font-size:17px;
+  }
 
-    grid-template-columns:
-        repeat(3, 1fr);
+  .navlinks a{
+    padding:8px;
+    font-size:12px;
+  }
 
-    gap: 17px;
+  .navlinks a:nth-child(1),
+  .navlinks a:nth-child(2){
+    display:none;
+  }
+
+  .hero h1{
+    letter-spacing:-3px;
+  }
+
+  .hero p{
+    font-size:16px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  section{
+    padding:65px 0;
+  }
+
+  .section-title h2{
+    font-size:34px;
+  }
+
+  .minecraft h2{
+    font-size:32px;
+  }
 }
-
-.feature {
-
-    padding: 30px;
-
-    border-radius: 20px;
-
-    background: #0d0d0d;
-
-    border: 1px solid #1e1e1e;
-
-    transition: .3s;
-}
-
-.feature:hover {
-
-    transform: translateY(-8px);
-
-    border-color: #ff0000;
-
-    box-shadow:
-        0 15px 40px rgba(255,0,0,.08);
-}
-
-.feature-icon {
-
-    font-size: 35px;
-
-    margin-bottom: 18px;
-}
-
-.feature h3 {
-
-    margin-bottom: 10px;
-
-    font-size: 20px;
-}
-
-.feature p {
-
-    color: #777;
-
-    line-height: 1.6;
-
-    font-size: 14px;
-}
-
-/* =====================================================
-   YOUTUBE
-===================================================== */
-
-.youtube {
-
-    text-align: center;
-
-    padding: 80px 25px;
-
-    border-radius: 30px;
-
-    border: 1px solid rgba(255,0,0,.18);
-
-    background:
-
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255,0,0,.18),
-            transparent 50%
-        ),
-
-        #0c0c0c;
-
-    position: relative;
-
-    overflow: hidden;
-}
-
-.youtube::before {
-
-    content: "▶";
-
-    position: absolute;
-
-    font-size: 300px;
-
-    color: rgba(255,0,0,.025);
-
-    right: -40px;
-
-    bottom: -120px;
-}
-
-.youtube h2 {
-
-    font-size: 40px;
-
-    margin-bottom: 15px;
-}
-
-.youtube p {
-
-    color: #777;
-
-    margin-bottom: 30px;
-}
-
-/* =====================================================
-   COMMUNITY
-===================================================== */
-
-.community {
-
-    text-align: center;
-
-    padding: 70px 25px;
-
-    border-radius: 28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #141414,
-            #090909
-        );
-
-    border: 1px solid #252525;
-}
-
-.community-icon {
-
-    font-size: 55px;
-
-    margin-bottom: 18px;
-}
-
-.community h2 {
-
-    font-size: 34px;
-
-    margin-bottom: 12px;
-}
-
-.community p {
-
-    color: #777;
-
-    margin-bottom: 28px;
-}
-
-/* =====================================================
-   FLOATING CHAT
-===================================================== */
-
-.chat-button {
-
-    position: fixed;
-
-    right: 24px;
-    bottom: 24px;
-
-    width: 70px;
-    height: 70px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #ff0000;
-
-    color: white;
-
-    text-decoration: none;
-
-    font-size: 30px;
-
-    z-index: 9999;
-
-    box-shadow:
-        0 8px 35px rgba(255,0,0,.55);
-
-    transition: .25s;
-}
-
-.chat-button:hover {
-
-    transform: scale(1.13) rotate(-5deg);
-
-    box-shadow:
-        0 8px 50px rgba(255,0,0,.8);
-}
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-
-    text-align: center;
-
-    padding: 50px 20px;
-
-    border-top: 1px solid #151515;
-
-    color: #444;
-
-    font-size: 13px;
-}
-
-footer strong {
-
-    color: #ff0000;
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width: 750px) {
-
-    nav {
-
-        top: 8px;
-
-        height: 60px;
-
-        width: 94%;
-    }
-
-    .nav-links {
-
-        display: none;
-    }
-
-    .hero {
-
-        min-height: 90vh;
-    }
-
-    .hero h1 {
-
-        font-size: clamp(60px, 18vw, 100px);
-
-        letter-spacing: -6px;
-    }
-
-    .hero-subtitle {
-
-        font-size: 16px;
-    }
-
-    section {
-
-        padding: 80px 0;
-    }
-
-    .about {
-
-        grid-template-columns: 1fr;
-    }
-
-    .features {
-
-        grid-template-columns: 1fr;
-    }
-
-    .section-heading h2 {
-
-        font-size: 35px;
-    }
-
-    .chat-button {
-
-        width: 62px;
-        height: 62px;
-
-        right: 17px;
-        bottom: 17px;
-    }
-}
-
 </style>
 </head>
 
-
 <body>
 
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
+<!-- NAVIGATION -->
 <nav>
 
-    <div class="logo">
-        Pixel<span>Olof</span>
-    </div>
+  <div class="logo">
+    PIXELOLOF
+  </div>
 
-    <div class="nav-links">
-
-        <a href="#about">OM MIG</a>
-
-        <a href="#features">INNEHÅLL</a>
-
-        <a href="#youtube">YOUTUBE</a>
-
-        <a href="#community">COMMUNITY</a>
-
-    </div>
+  <div class="navlinks">
+    <a href="#about">OM MIG</a>
+    <a href="#gaming">GAMING</a>
+    <a href="members.html">MEDLEMMAR</a>
+    <a href="#community">COMMUNITY</a>
+  </div>
 
 </nav>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
+<!-- HERO -->
 <header class="hero">
 
-    <div class="hero-content">
+  <div class="hero-content">
 
-        <div class="badge">
+    <div class="badge">
+      OFFICIAL PIXELOLOF WEBSITE
+    </div>
 
-            <span class="dot"></span>
+    <h1>
+      PIXEL<span>OLOF</span>
+    </h1>
 
-            OFFICIAL PIXELOLOF WEBSITE
+    <p>
+      Välkommen till PixelOlofs officiella hemsida.
+      Här hittar du gaming, Minecraft, community och
+      exklusiva saker för medlemmar.
+    </p>
 
-        </div>
+    <div class="buttons">
 
+      <a
+        class="btn btn-red"
+        href="https://www.youtube.com/@pixelolof"
+        target="_blank">
+        ▶ YOUTUBE
+      </a>
 
-        <h1>
-
-            PIXEL<span>OLOF</span>
-
-        </h1>
-
-
-        <p class="hero-subtitle">
-
-            Gaming, Minecraft och en community.
-            Välkommen till PixelOlofs officiella hemsida.
-
-        </p>
-
-
-        <div class="buttons">
-
-            <a
-                class="btn btn-red"
-                href="https://youtube.com/@pixelolof"
-                target="_blank"
-                rel="noopener noreferrer">
-
-                ▶ BESÖK YOUTUBE
-
-            </a>
-
-
-            <a
-                class="btn btn-dark"
-                href="#community">
-
-                💬 COMMUNITY
-
-            </a>
-
-        </div>
+      <a
+        class="btn btn-dark"
+        href="members.html">
+        🔐 MEDLEMMAR
+      </a>
 
     </div>
 
-
-    <div class="scroll">
-
-        SCROLLA NER ↓
-
-    </div>
+  </div>
 
 </header>
 
 
-<!-- =========================
-     ABOUT
-========================= -->
-
+<!-- ABOUT -->
 <section id="about">
 
-    <div class="section-heading">
+  <div class="section-title">
+    <small>PIXEL OLOF</small>
+    <h2>Om sidan</h2>
+  </div>
 
-        <h2>Vem är PixelOlof?</h2>
+  <div class="grid">
 
-        <p>
-            Gaming och kreativitet.
-        </p>
-
+    <div class="card">
+      <div class="icon">🎮</div>
+      <h3>Gaming</h3>
+      <p>
+        Gaming är en stor del av PixelOlofs community
+        och innehållet på YouTube.
+      </p>
     </div>
 
-
-    <div class="about">
-
-
-        <div class="about-card">
-
-            <h3>🎮 Gaming</h3>
-
-            <p>
-
-                PixelOlof handlar om gaming,
-                roliga moments och saker som händer
-                i spelvärlden.
-
-            </p>
-
-        </div>
-
-
-        <div class="about-card minecraft-card">
-
-            <div class="minecraft-icon">
-                ⛏️
-            </div>
-
-            <h3>Minecraft</h3>
-
-            <p>
-
-                Minecraft är en del av PixelOlof.
-                Bygg, utforska och skapa nya äventyr.
-
-            </p>
-
-        </div>
-
-
+    <div class="card">
+      <div class="icon">⛏️</div>
+      <h3>Minecraft</h3>
+      <p>
+        Minecraft-inspirerad design och gaminginnehåll
+        för alla som gillar block, byggen och äventyr.
+      </p>
     </div>
+
+    <div class="card">
+      <div class="icon">🔥</div>
+      <h3>PixelOlof</h3>
+      <p>
+        En plats för communityn och alla som följer
+        PixelOlofs innehåll.
+      </p>
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =========================
-     FEATURES
-========================= -->
+<!-- MINECRAFT -->
+<section>
 
-<section id="features">
+  <div class="minecraft">
 
-    <div class="section-heading">
+    <h2>⛏️ MINECRAFT</h2>
 
-        <h2>PixelOlof-världen</h2>
+    <p>
+      En liten Minecraft-touch på hemsidan,
+      precis lagom för PixelOlofs gaming-community.
+    </p>
 
-        <p>
-            Lite av allt som hör till kanalen.
-        </p>
+    <a
+      class="btn btn-red"
+      href="https://www.youtube.com/@pixelolof"
+      target="_blank">
+      SE PIXELOLOF PÅ YOUTUBE
+    </a>
 
-    </div>
-
-
-    <div class="features">
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                ⛏️
-            </div>
-
-            <h3>Minecraft</h3>
-
-            <p>
-                Byggande, äventyr och kreativitet
-                i blockvärlden.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🎮
-            </div>
-
-            <h3>Gaming</h3>
-
-            <p>
-                Gaming och roliga spelmoment
-                för communityn.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🔥
-            </div>
-
-            <h3>Community</h3>
-
-            <p>
-                En plats där PixelOlof-fans
-                kan hänga och snacka.
-            </p>
-
-        </div>
-
-
-    </div>
+  </div>
 
 </section>
 
 
-<!-- =========================
-     YOUTUBE
-========================= -->
+<!-- GAMING -->
+<section id="gaming">
 
-<section id="youtube">
+  <div class="section-title">
+    <small>GAME ON</small>
+    <h2>Gaming</h2>
+  </div>
 
-    <div class="youtube">
+  <div class="grid">
 
-        <h2>
-            ▶ PixelOlof på YouTube
-        </h2>
-
-        <p>
-            Vill du se vad PixelOlof håller på med?
-            Kolla in kanalen.
-        </p>
-
-
-        <a
-            class="btn btn-red"
-            href="https://youtube.com/@pixelolof"
-            target="_blank"
-            rel="noopener noreferrer">
-
-            ÖPPNA KANALEN
-
-        </a>
-
+    <div class="card">
+      <div class="icon">🕹️</div>
+      <h3>Gaming</h3>
+      <p>
+        Gaming, roliga stunder och nya äventyr.
+      </p>
     </div>
+
+    <div class="card">
+      <div class="icon">⛏️</div>
+      <h3>Minecraft</h3>
+      <p>
+        Bygg, överlev och utforska Minecraft-världen.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🏆</div>
+      <h3>Challenges</h3>
+      <p>
+        Utmaningar och annat kul för communityn.
+      </p>
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =========================
-     COMMUNITY
-========================= -->
-
+<!-- COMMUNITY -->
 <section id="community">
 
-    <div class="community">
+  <div class="section-title">
+    <small>COMMUNITY</small>
+    <h2>Häng med</h2>
+  </div>
 
-        <div class="community-icon">
-            💬
-        </div>
+  <div class="youtube">
 
-        <h2>
-            PixelOlof Community
-        </h2>
+    <h2>❤️ PixelOlof Community</h2>
 
-        <p>
-            Snacka med andra och häng med i communityn.
-        </p>
+    <p>
+      Vill du snacka med andra och vara en del av
+      communityn? Öppna PixelOlofs community-chat.
+    </p>
 
+    <div class="buttons">
 
-        <a
-            class="btn btn-red"
-            href="https://organizations.minnit.chat/904015145198288/c/Main"
-            target="_blank"
-            rel="noopener noreferrer">
+      <a
+        class="btn btn-red"
+        href="https://organizations.minnit.chat/904015145198288/c/Main"
+        target="_blank">
+        💬 ÖPPNA CHAT
+      </a>
 
-            💬 ÖPPNA CHATTEN
-
-        </a>
+      <a
+        class="btn btn-dark"
+        href="members.html">
+        🔐 MEDLEMMAR
+      </a>
 
     </div>
+
+  </div>
 
 </section>
 
 
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- YOUTUBE -->
+<section>
 
-<footer>
+  <div class="youtube">
 
-    © 2026
-    <strong>PixelOlof</strong>
+    <h2>▶ YouTube</h2>
 
-    • Official Website
+    <p>
+      Följ PixelOlof på YouTube för nytt innehåll.
+    </p>
 
-</footer>
+    <a
+      class="btn btn-red"
+      href="https://www.youtube.com/@pixelolof"
+      target="_blank">
+      BESÖK YOUTUBE
+    </a>
+
+  </div>
+
+</section>
 
 
-<!-- =========================
-     FLOATING CHAT
-========================= -->
-
+<!-- FLOATING CHAT -->
 <a
-    class="chat-button"
-    href="https://organizations.minnit.chat/904015145198288/c/Main"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Öppna PixelOlof chat">
-
-    💬
-
+  class="chat-button"
+  href="https://organizations.minnit.chat/904015145198288/c/Main"
+  target="_blank"
+  title="Community Chat">
+  💬
 </a>
 
+
+<!-- FOOTER -->
+<footer>
+
+  <p>
+    © 2026 <strong>PixelOlof</strong> —
+    Official Website
+  </p>
+
+</footer>
 
 </body>
 </html>
