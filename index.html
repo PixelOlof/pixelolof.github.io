@@ -4,11 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PixelOlof | Official</title>
+<title>PixelOlof — Official</title>
 
-<meta name="description" content="PixelOlof – Minecraft, gaming och YouTube Shorts.">
+<meta name="description"
+content="PixelOlof Official — Gaming, Minecraft och community.">
 
 <style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -21,52 +27,99 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #060606;
-    color: #fff;
+    background: #050505;
+    color: white;
     overflow-x: hidden;
 }
 
-/* =========================
+/* =====================================================
    BACKGROUND
-========================= */
+===================================================== */
 
 body::before {
     content: "";
     position: fixed;
     inset: 0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+
     pointer-events: none;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255,0,0,.10), transparent 30%),
-        radial-gradient(circle at 80% 70%, rgba(255,0,0,.07), transparent 30%);
-    z-index: -1;
+
+    z-index: -3;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 700px;
+    height: 700px;
+
+    left: 50%;
+    top: -350px;
+
+    transform: translateX(-50%);
+
+    background: rgba(255,0,0,.13);
+
+    filter: blur(150px);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: -2;
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
 nav {
+
     position: fixed;
-    top: 0;
-    width: 100%;
-    height: 72px;
-    z-index: 1000;
+
+    top: 15px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: min(1150px, 92%);
+
+    height: 65px;
 
     display: flex;
-    align-items: center;
+
     justify-content: space-between;
+    align-items: center;
 
-    padding: 0 6%;
+    padding: 0 24px;
 
-    background: rgba(5,5,5,.78);
-    backdrop-filter: blur(16px);
+    background: rgba(12,12,12,.75);
 
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 18px;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.35);
 }
 
 .logo {
-    font-size: 25px;
+
+    font-size: 23px;
+
     font-weight: 1000;
+
     letter-spacing: -1px;
 }
 
@@ -75,128 +128,242 @@ nav {
 }
 
 .nav-links {
+
     display: flex;
-    gap: 30px;
+
+    gap: 28px;
 }
 
 .nav-links a {
-    color: #aaa;
+
+    color: #999;
+
     text-decoration: none;
-    font-size: 14px;
+
+    font-size: 13px;
+
     font-weight: bold;
-    transition: .2s;
+
+    transition: .25s;
 }
 
 .nav-links a:hover {
-    color: #fff;
+
+    color: white;
+
+    text-shadow:
+        0 0 15px rgba(255,0,0,.8);
 }
 
-/* =========================
+/* =====================================================
    HERO
-========================= */
+===================================================== */
 
 .hero {
+
     min-height: 100vh;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
 
-    padding: 130px 20px 80px;
+    padding: 130px 20px 70px;
 
     position: relative;
 
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(255,0,0,.25),
-            transparent 35%
-        ),
-        linear-gradient(
-            180deg,
-            #111 0%,
-            #080808 55%,
-            #060606 100%
-        );
+    overflow: hidden;
+}
+
+.hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border: 1px solid rgba(255,0,0,.12);
+
+    border-radius: 50%;
+
+    animation: spin 25s linear infinite;
+}
+
+.hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 700px;
+    height: 700px;
+
+    border: 1px solid rgba(255,0,0,.06);
+
+    border-radius: 50%;
+
+    animation: spinReverse 35s linear infinite;
+}
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
 }
 
 .hero-content {
-    max-width: 900px;
+
+    position: relative;
+
+    z-index: 5;
+
+    max-width: 950px;
 }
 
-.status {
+/* =====================================================
+   BADGE
+===================================================== */
+
+.badge {
+
     display: inline-flex;
+
     align-items: center;
-    gap: 8px;
 
-    padding: 9px 15px;
+    gap: 9px;
 
-    border: 1px solid rgba(255,0,0,.5);
-    background: rgba(255,0,0,.07);
+    padding: 9px 16px;
 
     border-radius: 50px;
 
-    color: #ff6666;
+    background: rgba(255,0,0,.06);
 
-    font-size: 13px;
+    border: 1px solid rgba(255,0,0,.3);
+
+    color: #ff5555;
+
+    font-size: 12px;
+
     font-weight: bold;
 
-    margin-bottom: 25px;
+    margin-bottom: 28px;
+
+    box-shadow:
+        0 0 25px rgba(255,0,0,.08);
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
+.dot {
+
+    width: 7px;
+    height: 7px;
+
     border-radius: 50%;
+
     background: #ff0000;
-    box-shadow: 0 0 12px #ff0000;
+
+    box-shadow:
+        0 0 12px #ff0000;
+
+    animation: pulse 1.5s infinite;
 }
+
+@keyframes pulse {
+
+    0%,100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .4;
+        transform: scale(.7);
+    }
+}
+
+/* =====================================================
+   MAIN TITLE
+===================================================== */
 
 .hero h1 {
-    font-size: clamp(65px, 14vw, 145px);
-    line-height: .85;
 
-    letter-spacing: -8px;
+    font-size: clamp(65px, 14vw, 155px);
+
+    line-height: .82;
+
+    letter-spacing: -9px;
 
     font-weight: 1000;
+
+    text-transform: uppercase;
 }
 
 .hero h1 span {
+
     color: #ff0000;
 
     text-shadow:
-        0 0 20px rgba(255,0,0,.8),
-        0 0 70px rgba(255,0,0,.35);
+        0 0 15px rgba(255,0,0,.9),
+        0 0 45px rgba(255,0,0,.55),
+        0 0 100px rgba(255,0,0,.2);
 }
 
-.hero-text {
-    max-width: 650px;
+.hero-subtitle {
 
-    margin: 30px auto;
+    margin: 35px auto;
 
-    color: #999;
+    max-width: 620px;
 
-    font-size: 19px;
-    line-height: 1.6;
+    color: #8b8b8b;
+
+    font-size: 18px;
+
+    line-height: 1.7;
 }
 
-/* =========================
+/* =====================================================
    BUTTONS
-========================= */
+===================================================== */
 
 .buttons {
+
     display: flex;
+
     justify-content: center;
-    gap: 14px;
+
+    gap: 13px;
+
     flex-wrap: wrap;
 }
 
 .btn {
+
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
+
     gap: 8px;
 
     padding: 16px 25px;
@@ -205,319 +372,378 @@ nav {
 
     text-decoration: none;
 
-    font-weight: 800;
+    font-weight: 900;
 
-    transition: .2s;
+    font-size: 14px;
+
+    transition: .25s;
 }
 
 .btn-red {
-    background: #ff0000;
+
     color: white;
 
+    background: #ff0000;
+
     box-shadow:
-        0 8px 30px rgba(255,0,0,.25);
+        0 10px 35px rgba(255,0,0,.3);
 }
 
 .btn-dark {
+
     color: white;
 
-    background: #171717;
+    background: rgba(255,255,255,.04);
 
-    border: 1px solid #333;
+    border: 1px solid rgba(255,255,255,.12);
+
+    backdrop-filter: blur(10px);
 }
 
 .btn:hover {
-    transform: translateY(-4px);
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 15px 40px rgba(255,0,0,.3);
 }
 
-/* =========================
+/* =====================================================
    SCROLL
-========================= */
+===================================================== */
 
 .scroll {
+
     position: absolute;
-    bottom: 30px;
+
+    bottom: 25px;
 
     left: 50%;
+
     transform: translateX(-50%);
 
-    color: #555;
+    color: #444;
 
-    font-size: 12px;
+    font-size: 10px;
+
+    letter-spacing: 3px;
 }
 
-/* =========================
-   GENERAL SECTIONS
-========================= */
+/* =====================================================
+   SECTIONS
+===================================================== */
 
 section {
+
     width: min(1100px, 92%);
 
     margin: auto;
 
-    padding: 100px 0;
+    padding: 120px 0;
 }
 
 .section-heading {
+
     text-align: center;
-    margin-bottom: 45px;
+
+    margin-bottom: 55px;
 }
 
 .section-heading h2 {
-    font-size: 42px;
-    margin-bottom: 10px;
+
+    font-size: 43px;
+
+    letter-spacing: -1px;
+
+    margin-bottom: 12px;
 }
 
 .section-heading p {
-    color: #777;
+
+    color: #666;
+
+    font-size: 15px;
 }
 
-/* =========================
-   STATS
-========================= */
+/* =====================================================
+   ABOUT
+===================================================== */
 
-.stats {
+.about {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.about-card {
+
+    padding: 40px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.015)
+        );
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    backdrop-filter: blur(15px);
+
+    transition: .3s;
+}
+
+.about-card:hover {
+
+    border-color: rgba(255,0,0,.35);
+
+    transform: translateY(-6px);
+}
+
+.about-card h3 {
+
+    font-size: 27px;
+
+    margin-bottom: 15px;
+}
+
+.about-card p {
+
+    color: #888;
+
+    line-height: 1.8;
+}
+
+/* =====================================================
+   MINECRAFT CARD
+===================================================== */
+
+.minecraft-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 280px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #090909
+        );
+}
+
+.minecraft-card::before {
+
+    content: "⛏";
+
+    position: absolute;
+
+    right: -15px;
+    bottom: -45px;
+
+    font-size: 210px;
+
+    opacity: .035;
+
+    transform: rotate(-15deg);
+}
+
+.minecraft-card .minecraft-icon {
+
+    font-size: 45px;
+
+    margin-bottom: 20px;
+}
+
+/* =====================================================
+   FEATURES
+===================================================== */
+
+.features {
+
     display: grid;
 
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 15px;
+    gap: 17px;
 }
 
-.stat {
+.feature {
+
     padding: 30px;
-
-    text-align: center;
-
-    background: #101010;
-
-    border: 1px solid #222;
-
-    border-radius: 18px;
-}
-
-.stat-number {
-    font-size: 32px;
-    font-weight: 1000;
-
-    color: #ff0000;
-}
-
-.stat-name {
-    color: #777;
-
-    margin-top: 5px;
-
-    font-size: 13px;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-.cards {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(250px, 1fr));
-
-    gap: 18px;
-}
-
-.card {
-    padding: 30px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #151515,
-            #0d0d0d
-        );
-
-    border: 1px solid #242424;
 
     border-radius: 20px;
 
-    transition: .25s;
+    background: #0d0d0d;
+
+    border: 1px solid #1e1e1e;
+
+    transition: .3s;
 }
 
-.card:hover {
-    transform: translateY(-7px);
+.feature:hover {
+
+    transform: translateY(-8px);
 
     border-color: #ff0000;
 
     box-shadow:
-        0 15px 40px rgba(255,0,0,.10);
+        0 15px 40px rgba(255,0,0,.08);
 }
 
-.card-icon {
-    font-size: 42px;
+.feature-icon {
+
+    font-size: 35px;
+
     margin-bottom: 18px;
 }
 
-.card h3 {
-    font-size: 22px;
+.feature h3 {
+
     margin-bottom: 10px;
+
+    font-size: 20px;
 }
 
-.card p {
-    color: #888;
+.feature p {
+
+    color: #777;
+
     line-height: 1.6;
+
+    font-size: 14px;
 }
 
-/* =========================
+/* =====================================================
    YOUTUBE
-========================= */
+===================================================== */
 
-.youtube-box {
+.youtube {
+
+    text-align: center;
+
+    padding: 80px 25px;
+
+    border-radius: 30px;
+
+    border: 1px solid rgba(255,0,0,.18);
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255,0,0,.18),
+            transparent 50%
+        ),
+
+        #0c0c0c;
+
     position: relative;
 
     overflow: hidden;
+}
+
+.youtube::before {
+
+    content: "▶";
+
+    position: absolute;
+
+    font-size: 300px;
+
+    color: rgba(255,0,0,.025);
+
+    right: -40px;
+
+    bottom: -120px;
+}
+
+.youtube h2 {
+
+    font-size: 40px;
+
+    margin-bottom: 15px;
+}
+
+.youtube p {
+
+    color: #777;
+
+    margin-bottom: 30px;
+}
+
+/* =====================================================
+   COMMUNITY
+===================================================== */
+
+.community {
 
     text-align: center;
 
     padding: 70px 25px;
 
-    border-radius: 25px;
-
-    border: 1px solid #292929;
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255,0,0,.20),
-            transparent 45%
-        ),
-        #101010;
-}
-
-.youtube-box::after {
-    content: "▶";
-
-    position: absolute;
-
-    font-size: 230px;
-
-    color: rgba(255,0,0,.025);
-
-    right: -20px;
-    bottom: -70px;
-
-    pointer-events: none;
-}
-
-.youtube-box h2 {
-    font-size: 35px;
-    margin-bottom: 12px;
-}
-
-.youtube-box p {
-    color: #888;
-    margin-bottom: 30px;
-}
-
-/* =========================
-   MINECRAFT SERVER
-========================= */
-
-.server {
-    padding: 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 25px;
-
-    background: #101010;
-
-    border: 1px solid #292929;
-
-    border-radius: 20px;
-}
-
-.server-info h3 {
-    font-size: 24px;
-    margin-bottom: 8px;
-}
-
-.server-info p {
-    color: #777;
-}
-
-.server-ip {
-    display: inline-block;
-
-    margin-top: 15px;
-
-    padding: 10px 15px;
-
-    background: #080808;
-
-    border: 1px solid #333;
-
-    border-radius: 9px;
-
-    color: #ff4444;
-
-    font-family: monospace;
-}
-
-/* =========================
-   CHAT
-========================= */
-
-.chat-box {
-    text-align: center;
-
-    padding: 55px 25px;
+    border-radius: 28px;
 
     background:
         linear-gradient(
             145deg,
-            #151515,
-            #0c0c0c
+            #141414,
+            #090909
         );
 
-    border: 1px solid #292929;
-
-    border-radius: 25px;
+    border: 1px solid #252525;
 }
 
-.chat-icon {
+.community-icon {
+
     font-size: 55px;
-    margin-bottom: 15px;
+
+    margin-bottom: 18px;
 }
 
-.chat-box h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
+.community h2 {
+
+    font-size: 34px;
+
+    margin-bottom: 12px;
 }
 
-.chat-box p {
-    color: #888;
-    margin-bottom: 25px;
+.community p {
+
+    color: #777;
+
+    margin-bottom: 28px;
 }
 
-/* =========================
+/* =====================================================
    FLOATING CHAT
-========================= */
+===================================================== */
 
 .chat-button {
+
     position: fixed;
 
-    right: 22px;
-    bottom: 22px;
+    right: 24px;
+    bottom: 24px;
 
-    width: 68px;
-    height: 68px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 70px;
+    height: 70px;
 
     border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     background: #ff0000;
 
@@ -530,73 +756,100 @@ section {
     z-index: 9999;
 
     box-shadow:
-        0 7px 35px rgba(255,0,0,.55);
+        0 8px 35px rgba(255,0,0,.55);
 
-    transition: .2s;
+    transition: .25s;
 }
 
 .chat-button:hover {
-    transform: scale(1.12);
+
+    transform: scale(1.13) rotate(-5deg);
+
+    box-shadow:
+        0 8px 50px rgba(255,0,0,.8);
 }
 
-/* =========================
+/* =====================================================
    FOOTER
-========================= */
+===================================================== */
 
 footer {
-    padding: 45px 20px;
 
     text-align: center;
 
-    color: #555;
+    padding: 50px 20px;
 
-    border-top: 1px solid #1c1c1c;
+    border-top: 1px solid #151515;
+
+    color: #444;
+
+    font-size: 13px;
 }
 
 footer strong {
+
     color: #ff0000;
 }
 
-/* =========================
+/* =====================================================
    MOBILE
-========================= */
+===================================================== */
 
-@media(max-width: 700px) {
+@media(max-width: 750px) {
 
     nav {
-        padding: 0 20px;
+
+        top: 8px;
+
+        height: 60px;
+
+        width: 94%;
     }
 
     .nav-links {
+
         display: none;
     }
 
-    .hero h1 {
-        letter-spacing: -5px;
+    .hero {
+
+        min-height: 90vh;
     }
 
-    .hero-text {
+    .hero h1 {
+
+        font-size: clamp(60px, 18vw, 100px);
+
+        letter-spacing: -6px;
+    }
+
+    .hero-subtitle {
+
         font-size: 16px;
     }
 
     section {
-        padding: 75px 0;
+
+        padding: 80px 0;
     }
 
-    .section-heading h2 {
-        font-size: 34px;
-    }
+    .about {
 
-    .stats {
         grid-template-columns: 1fr;
     }
 
-    .server {
-        flex-direction: column;
-        align-items: flex-start;
+    .features {
+
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading h2 {
+
+        font-size: 35px;
     }
 
     .chat-button {
+
         width: 62px;
         height: 62px;
 
@@ -604,12 +857,17 @@ footer strong {
         bottom: 17px;
     }
 }
+
 </style>
 </head>
 
+
 <body>
 
-<!-- NAVIGATION -->
+
+<!-- =========================
+     NAVIGATION
+========================= -->
 
 <nav>
 
@@ -618,34 +876,51 @@ footer strong {
     </div>
 
     <div class="nav-links">
-        <a href="#om">OM MIG</a>
+
+        <a href="#about">OM MIG</a>
+
+        <a href="#features">INNEHÅLL</a>
+
         <a href="#youtube">YOUTUBE</a>
-        <a href="#server">SERVER</a>
-        <a href="#chat">CHAT</a>
+
+        <a href="#community">COMMUNITY</a>
+
     </div>
 
 </nav>
 
 
-<!-- HERO -->
+<!-- =========================
+     HERO
+========================= -->
 
 <header class="hero">
 
     <div class="hero-content">
 
-        <div class="status">
-            <span class="status-dot"></span>
-            PIXELOLOF ONLINE
+        <div class="badge">
+
+            <span class="dot"></span>
+
+            OFFICIAL PIXELOLOF WEBSITE
+
         </div>
 
+
         <h1>
+
             PIXEL<span>OLOF</span>
+
         </h1>
 
-        <p class="hero-text">
-            Minecraft, gaming och YouTube Shorts.
-            Välkommen till den officiella PixelOlof-hemsidan.
+
+        <p class="hero-subtitle">
+
+            Gaming, Minecraft och en community.
+            Välkommen till PixelOlofs officiella hemsida.
+
         </p>
+
 
         <div class="buttons">
 
@@ -655,15 +930,16 @@ footer strong {
                 target="_blank"
                 rel="noopener noreferrer">
 
-                ▶ YouTube
+                ▶ BESÖK YOUTUBE
 
             </a>
 
+
             <a
                 class="btn btn-dark"
-                href="#server">
+                href="#community">
 
-                ⛏️ Minecraft
+                💬 COMMUNITY
 
             </a>
 
@@ -671,121 +947,164 @@ footer strong {
 
     </div>
 
+
     <div class="scroll">
-        ↓ SCROLLA NER
+
+        SCROLLA NER ↓
+
     </div>
 
 </header>
 
 
-<!-- STATS -->
+<!-- =========================
+     ABOUT
+========================= -->
 
-<section>
-
-    <div class="stats">
-
-        <div class="stat">
-            <div class="stat-number">🎮</div>
-            <div class="stat-name">GAMING</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-number">⛏️</div>
-            <div class="stat-name">MINECRAFT</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-number">🔥</div>
-            <div class="stat-name">SHORTS</div>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- OM MIG -->
-
-<section id="om">
+<section id="about">
 
     <div class="section-heading">
 
-        <h2>Vad gör PixelOlof?</h2>
+        <h2>Vem är PixelOlof?</h2>
 
-        <p>Gaming och Minecraft för dig som gillar roliga videos.</p>
+        <p>
+            Gaming och kreativitet.
+        </p>
 
     </div>
 
 
-    <div class="cards">
+    <div class="about">
 
-        <div class="card">
 
-            <div class="card-icon">⛏️</div>
+        <div class="about-card">
+
+            <h3>🎮 Gaming</h3>
+
+            <p>
+
+                PixelOlof handlar om gaming,
+                roliga moments och saker som händer
+                i spelvärlden.
+
+            </p>
+
+        </div>
+
+
+        <div class="about-card minecraft-card">
+
+            <div class="minecraft-icon">
+                ⛏️
+            </div>
 
             <h3>Minecraft</h3>
 
             <p>
-                Minecraft-servrar, byggen, challenges
-                och roliga moments.
+
+                Minecraft är en del av PixelOlof.
+                Bygg, utforska och skapa nya äventyr.
+
             </p>
 
         </div>
 
-
-        <div class="card">
-
-            <div class="card-icon">🎬</div>
-
-            <h3>YouTube Shorts</h3>
-
-            <p>
-                Korta och underhållande videos
-                som är perfekta att kolla snabbt.
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="card-icon">🎮</div>
-
-            <h3>Gaming</h3>
-
-            <p>
-                Olika spel, challenges och
-                annat gaming-innehåll.
-            </p>
-
-        </div>
 
     </div>
 
 </section>
 
 
-<!-- YOUTUBE -->
+<!-- =========================
+     FEATURES
+========================= -->
 
-<section id="youtube">
+<section id="features">
 
     <div class="section-heading">
 
-        <h2>YouTube</h2>
+        <h2>PixelOlof-världen</h2>
 
-        <p>Häng med på nästa video!</p>
+        <p>
+            Lite av allt som hör till kanalen.
+        </p>
 
     </div>
 
 
-    <div class="youtube-box">
+    <div class="features">
 
-        <h2>🔥 PixelOlof på YouTube</h2>
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⛏️
+            </div>
+
+            <h3>Minecraft</h3>
+
+            <p>
+                Byggande, äventyr och kreativitet
+                i blockvärlden.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🎮
+            </div>
+
+            <h3>Gaming</h3>
+
+            <p>
+                Gaming och roliga spelmoment
+                för communityn.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔥
+            </div>
+
+            <h3>Community</h3>
+
+            <p>
+                En plats där PixelOlof-fans
+                kan hänga och snacka.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     YOUTUBE
+========================= -->
+
+<section id="youtube">
+
+    <div class="youtube">
+
+        <h2>
+            ▶ PixelOlof på YouTube
+        </h2>
 
         <p>
-            Kolla in kanalen för Minecraft,
-            gaming och Shorts.
+            Vill du se vad PixelOlof håller på med?
+            Kolla in kanalen.
         </p>
+
 
         <a
             class="btn btn-red"
@@ -793,7 +1112,7 @@ footer strong {
             target="_blank"
             rel="noopener noreferrer">
 
-            ▶ ÖPPNA YOUTUBE
+            ÖPPNA KANALEN
 
         </a>
 
@@ -802,74 +1121,26 @@ footer strong {
 </section>
 
 
-<!-- SERVER -->
+<!-- =========================
+     COMMUNITY
+========================= -->
 
-<section id="server">
+<section id="community">
 
-    <div class="section-heading">
+    <div class="community">
 
-        <h2>⛏️ Minecraft</h2>
-
-        <p>Spela tillsammans med andra!</p>
-
-    </div>
-
-
-    <div class="server">
-
-        <div class="server-info">
-
-            <h3>Minecraft Server</h3>
-
-            <p>
-                Hoppa in och spela med communityn.
-            </p>
-
-            <div class="server-ip">
-                play.minecraft.se
-            </div>
-
-        </div>
-
-
-        <a
-            class="btn btn-red"
-            href="#chat">
-
-            💬 CHATTA
-
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- CHAT -->
-
-<section id="chat">
-
-    <div class="section-heading">
-
-        <h2>💬 Community Chat</h2>
-
-        <p>Snacka med andra PixelOlof-fans.</p>
-
-    </div>
-
-
-    <div class="chat-box">
-
-        <div class="chat-icon">
+        <div class="community-icon">
             💬
         </div>
 
-        <h3>Välkommen till chatten!</h3>
+        <h2>
+            PixelOlof Community
+        </h2>
 
         <p>
-            Klicka på knappen för att öppna
-            PixelOlof-communityns chatt.
+            Snacka med andra och häng med i communityn.
         </p>
+
 
         <a
             class="btn btn-red"
@@ -886,28 +1157,35 @@ footer strong {
 </section>
 
 
-<!-- FOOTER -->
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
 
-    © 2026 <strong>PixelOlof</strong>
+    © 2026
+    <strong>PixelOlof</strong>
+
     • Official Website
 
 </footer>
 
 
-<!-- FLOATING CHAT BUTTON -->
+<!-- =========================
+     FLOATING CHAT
+========================= -->
 
 <a
     class="chat-button"
     href="https://organizations.minnit.chat/904015145198288/c/Main"
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="Öppna chatten">
+    aria-label="Öppna PixelOlof chat">
 
     💬
 
 </a>
+
 
 </body>
 </html>
