@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PixelOlof – Admin</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#080808;color:#fff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#070707;color:#fff}
 .wrap{max-width:900px;margin:auto;padding:30px 16px}.card{background:#111;border:1px solid #292929;border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:0 0 25px rgba(255,0,0,.08)}
 h1{margin:0 0 8px}.red{color:#ff3030}.muted{color:#aaa}label{font-weight:700}
 input{width:100%;padding:14px;margin:7px 0 12px;border-radius:10px;border:1px solid #333;background:#080808;color:#fff;font-size:16px}
@@ -33,11 +33,15 @@ button:hover{background:#ff2929}.secondary{background:#252525}.secondary:hover{b
 
 <div id="adminPanel" class="hidden">
 <div class="card"><div class="topbar"><div><h1>⚙️ Adminpanel</h1><div class="muted">Inloggad som <b>PixelOlof</b></div></div><button id="logoutBtn" class="secondary">Logga ut</button></div></div>
+
 <div class="card">
-<h2>➕ Skapa medlem</h2><p class="muted">Skriv ett användarnamn. En unik kod skapas automatiskt.</p>
+<h2>➕ Skapa medlem</h2>
+<p class="muted">Skriv ett användarnamn. En unik medlemskod skapas automatiskt.</p>
 <input id="newUsername" type="text" placeholder="T.ex. PixelMember02">
-<button id="addBtn">Skapa medlem</button><div id="addMessage" class="hidden"></div>
+<button id="addBtn">Skapa medlem</button>
+<div id="addMessage" class="hidden"></div>
 </div>
+
 <div class="card"><h2>👥 Medlemmar</h2><div id="membersList"><p class="muted">Laddar...</p></div></div>
 </div>
 </div>
@@ -45,73 +49,187 @@ button:hover{background:#ff2929}.secondary{background:#252525}.secondary:hover{b
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,getDocs,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getFirestore,collection,getDocs,setDoc,doc,deleteDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyCtVV5fDpqiL-emhQ75dY_dTZtkhbYZCzk",
-authDomain:"pixelolof.firebaseapp.com",
-projectId:"pixelolof",
-storageBucket:"pixelolof.firebasestorage.app",
-messagingSenderId:"463793218153",
-appId:"1:463793218153:web:3b71016614d4aa9347b8f8"
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCtVV5fDpqiL-emhQ75dY_dTZtkhbYZCzk",
+  authDomain: "pixelolof.firebaseapp.com",
+  projectId: "pixelolof",
+  storageBucket: "pixelolof.firebasestorage.app",
+  messagingSenderId: "463793218153",
+  appId: "1:463793218153:web:3b71016614d4aa9347b8f8"
 };
 
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const ADMIN_USERNAME="PixelOlof",ADMIN_EMAIL="pixeln10@tuta.io";
-const loginCard=document.getElementById("loginCard"),adminPanel=document.getElementById("adminPanel");
-const loginError=document.getElementById("loginError"),addMessage=document.getElementById("addMessage"),membersList=document.getElementById("membersList");
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const ADMIN_USERNAME="PixelOlof";
+const ADMIN_EMAIL="pixeln10@tuta.io";
 
-function error(el,msg){el.textContent=msg;el.className="error"}
-function success(el,msg){el.textContent=msg;el.className="success"}
-function code(existing){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let x;do{x="PX-"+[0,1,2,3].map(()=>c[Math.floor(Math.random()*c.length)]).join("")+"-"+[0,1,2,3].map(()=>c[Math.floor(Math.random()*c.length)]).join("")}while(existing.has(x));return x}
+const loginCard=document.getElementById("loginCard");
+const adminPanel=document.getElementById("adminPanel");
+const loginError=document.getElementById("loginError");
+const addMessage=document.getElementById("addMessage");
+const membersList=document.getElementById("membersList");
+
+function showError(el,msg){el.textContent=msg;el.className="error"}
+function showSuccess(el,msg){el.textContent=msg;el.className="success"}
+
+function makeCode(existing){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code;
+  do{
+    let a="",b="";
+    for(let i=0;i<4;i++) a+=chars[Math.floor(Math.random()*chars.length)];
+    for(let i=0;i<4;i++) b+=chars[Math.floor(Math.random()*chars.length)];
+    code="PX-"+a+"-"+b;
+  }while(existing.has(code));
+  return code;
+}
+
+async function migrateOldMembers(){
+  const snap=await getDocs(collection(db,"members"));
+  const docs=[];
+  snap.forEach(d=>docs.push({id:d.id,data:d.data()}));
+
+  for(const item of docs){
+    const code=String(item.data.code||"").trim().toUpperCase();
+    if(!code || item.id===code) continue;
+
+    const target=doc(db,"members",code);
+    await setDoc(target,{...item.data,code});
+    await deleteDoc(doc(db,"members",item.id));
+  }
+}
 
 async function loadMembers(){
-membersList.innerHTML="";
-const snap=await getDocs(collection(db,"members"));
-if(snap.empty){const p=document.createElement("p");p.className="muted";p.textContent="Inga medlemmar ännu.";membersList.appendChild(p);return}
-const docs=[];snap.forEach(d=>docs.push(d.data()));
-docs.sort((a,b)=>String(a.username||"").localeCompare(String(b.username||"")));
-docs.forEach(d=>{
-const box=document.createElement("div");box.className="member";
-const name=document.createElement("strong");name.textContent=d.username||"Okänt användarnamn";box.appendChild(name);
-const co=document.createElement("div");co.className="code";co.textContent=d.code||"Ingen kod";box.appendChild(co);
-const row=document.createElement("div");row.className="row";
-const btn=document.createElement("button");btn.className="secondary";btn.textContent="Kopiera kod";
-btn.onclick=async()=>{try{await navigator.clipboard.writeText(d.code||"");btn.textContent="Kopierad ✓";setTimeout(()=>btn.textContent="Kopiera kod",1500)}catch{alert("Kunde inte kopiera automatiskt.")}};
-row.appendChild(btn);box.appendChild(row);membersList.appendChild(box);
-});
+  membersList.innerHTML="";
+  await migrateOldMembers();
+
+  const snap=await getDocs(collection(db,"members"));
+  if(snap.empty){
+    const p=document.createElement("p");
+    p.className="muted";
+    p.textContent="Inga medlemmar ännu.";
+    membersList.appendChild(p);
+    return;
+  }
+
+  const docs=[];
+  snap.forEach(d=>docs.push(d.data()));
+  docs.sort((a,b)=>String(a.username||"").localeCompare(String(b.username||"")));
+
+  docs.forEach(data=>{
+    const box=document.createElement("div");
+    box.className="member";
+
+    const name=document.createElement("strong");
+    name.textContent=data.username||"Okänt användarnamn";
+    box.appendChild(name);
+
+    const codeEl=document.createElement("div");
+    codeEl.className="code";
+    codeEl.textContent=data.code||"Ingen kod";
+    box.appendChild(codeEl);
+
+    const row=document.createElement("div");
+    row.className="row";
+
+    const copy=document.createElement("button");
+    copy.className="secondary";
+    copy.textContent="Kopiera kod";
+    copy.onclick=async()=>{
+      try{
+        await navigator.clipboard.writeText(data.code||"");
+        copy.textContent="Kopierad ✓";
+        setTimeout(()=>copy.textContent="Kopiera kod",1500);
+      }catch{
+        alert("Kunde inte kopiera automatiskt.");
+      }
+    };
+
+    row.appendChild(copy);
+    box.appendChild(row);
+    membersList.appendChild(box);
+  });
 }
 
 document.getElementById("loginBtn").onclick=async()=>{
-loginError.className="hidden";
-const u=document.getElementById("username").value.trim(),p=document.getElementById("password").value;
-if(u!==ADMIN_USERNAME)return error(loginError,"Fel användarnamn.");
-if(!p)return error(loginError,"Skriv ditt lösenord.");
-try{await signInWithEmailAndPassword(auth,ADMIN_EMAIL,p)}
-catch(e){console.error(e);error(loginError,"Firebase-fel: "+e.code+"\n"+(e.message||""))}
+  loginError.className="hidden";
+  const username=document.getElementById("username").value.trim();
+  const password=document.getElementById("password").value;
+
+  if(username!==ADMIN_USERNAME)return showError(loginError,"Fel användarnamn.");
+  if(!password)return showError(loginError,"Skriv ditt lösenord.");
+
+  try{
+    await signInWithEmailAndPassword(auth,ADMIN_EMAIL,password);
+  }catch(e){
+    console.error(e);
+    showError(loginError,"Firebase-fel: "+e.code+"\n"+(e.message||""));
+  }
 };
-document.getElementById("password").onkeydown=e=>{if(e.key==="Enter")document.getElementById("loginBtn").click()};
+
+document.getElementById("password").onkeydown=e=>{
+  if(e.key==="Enter")document.getElementById("loginBtn").click();
+};
+
 document.getElementById("logoutBtn").onclick=()=>signOut(auth);
 
 document.getElementById("addBtn").onclick=async()=>{
-addMessage.className="hidden";
-const username=document.getElementById("newUsername").value.trim();
-if(!username)return error(addMessage,"Skriv ett användarnamn.");
-try{
-const snap=await getDocs(collection(db,"members")),users=new Set(),codes=new Set();
-snap.forEach(d=>{const x=d.data();if(x.username)users.add(String(x.username).toLowerCase());if(x.code)codes.add(x.code)});
-if(users.has(username.toLowerCase()))return error(addMessage,"Det användarnamnet finns redan.");
-const c=code(codes);
-await addDoc(collection(db,"members"),{username,code:c,active:true,createdAt:serverTimestamp()});
-document.getElementById("newUsername").value="";
-success(addMessage,"Medlem skapad!\nAnvändarnamn: "+username+"\nKod: "+c);
-await loadMembers();
-}catch(e){console.error(e);error(addMessage,"Kunde inte skapa medlem:\n"+e.code+"\n"+e.message)}
+  addMessage.className="hidden";
+  const username=document.getElementById("newUsername").value.trim();
+
+  if(!username)return showError(addMessage,"Skriv ett användarnamn.");
+
+  try{
+    const snap=await getDocs(collection(db,"members"));
+    const users=new Set();
+    const codes=new Set();
+
+    snap.forEach(d=>{
+      const x=d.data();
+      if(x.username)users.add(String(x.username).toLowerCase());
+      if(x.code)codes.add(String(x.code).toUpperCase());
+    });
+
+    if(users.has(username.toLowerCase()))
+      return showError(addMessage,"Det användarnamnet finns redan.");
+
+    const code=makeCode(codes);
+
+    await setDoc(doc(db,"members",code),{
+      username,
+      code,
+      active:true,
+      createdAt:serverTimestamp()
+    });
+
+    document.getElementById("newUsername").value="";
+    showSuccess(addMessage,"Medlem skapad!\nAnvändarnamn: "+username+"\nKod: "+code);
+    await loadMembers();
+  }catch(e){
+    console.error(e);
+    showError(addMessage,"Kunde inte skapa medlem:\n"+e.code+"\n"+e.message);
+  }
 };
 
 onAuthStateChanged(auth,async user=>{
-if(user){loginCard.classList.add("hidden");adminPanel.classList.remove("hidden");try{await loadMembers()}catch(e){membersList.innerHTML="";error(membersList,"Kunde inte läsa members:\n"+e.code+"\n"+e.message)}}
-else{loginCard.classList.remove("hidden");adminPanel.classList.add("hidden")}
+  if(user){
+    loginCard.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    try{
+      await loadMembers();
+    }catch(e){
+      console.error(e);
+      membersList.innerHTML="";
+      showError(membersList,"Kunde inte läsa medlemmarna:\n"+e.code+"\n"+e.message);
+    }
+  }else{
+    loginCard.classList.remove("hidden");
+    adminPanel.classList.add("hidden");
+  }
 });
 </script>
 </body>
