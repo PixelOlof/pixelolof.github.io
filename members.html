@@ -473,31 +473,108 @@ const memberCard=document.getElementById("memberCard");
 const memberName=document.getElementById("memberName");
 
 let currentMember=null;
-let xp=720;
-let level=7;
-let streak=1;
+let memberCode="";
+let xp=0;
+let level=1;
+let streak=0;
+let rewardClaims=0;
 let mysteryOpened=false;
 let quizCompleted=false;
+let quizIndex=0;
+
+function storageKey(){
+  return "pixelolof_member_" + memberCode;
+}
+
+function today(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function yesterday(){
+  const d=new Date();
+  d.setDate(d.getDate()-1);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function loadProgress(){
+  const saved=localStorage.getItem(storageKey());
+  if(!saved){
+    xp=0;
+    level=1;
+    streak=0;
+    rewardClaims=0;
+    mysteryOpened=false;
+    quizCompleted=false;
+    return;
+  }
+
+  try{
+    const data=JSON.parse(saved);
+    xp=Number(data.xp)||0;
+    level=Number(data.level)||1;
+    streak=Number(data.streak)||0;
+    rewardClaims=Number(data.rewardClaims)||0;
+    mysteryOpened=data.mysteryOpened===true;
+    quizCompleted=data.quizCompleted===true;
+  }catch(e){
+    xp=0; level=1; streak=0; rewardClaims=0;
+    mysteryOpened=false; quizCompleted=false;
+  }
+}
+
+function saveProgress(){
+  localStorage.setItem(storageKey(),JSON.stringify({
+    xp,level,streak,rewardClaims,mysteryOpened,quizCompleted,
+    lastReward: localStorage.getItem(storageKey()+"_lastReward") || null
+  }));
+}
 
 function showError(msg){
   error.textContent=msg;
   error.className="error";
 }
 
+function updateRewardUI(){
+  const last=localStorage.getItem(storageKey()+"_lastReward");
+  const btn=document.getElementById("rewardBtn");
+  const box=document.getElementById("rewardBox");
+  const nextReward=50+(rewardClaims*20);
+
+  if(last===today()){
+    btn.dataset.claimed="yes";
+    btn.textContent="✅ REWARD HÄMTAD IDAG";
+    btn.disabled=true;
+    box.innerHTML="✅ Du har redan hämtat dagens reward.<br><small>Nästa reward: <b>+"+nextReward+" XP</b></small>";
+  }else{
+    btn.dataset.claimed="no";
+    btn.disabled=false;
+    btn.textContent="🎁 HÄMTA +"+nextReward+" XP";
+    box.innerHTML="🎁 Dagens reward: <b>+"+nextReward+" XP</b><br><small>Dag "+(rewardClaims+1)+" • Nästa gång ökar den med 20 XP.</small>";
+  }
+}
+
 function updateDashboard(){
+  while(xp>=1000){
+    xp-=1000;
+    level++;
+  }
+
   document.getElementById("xp").textContent=xp;
   document.getElementById("xpStat").textContent=xp;
   document.getElementById("level").textContent=level;
   document.getElementById("streakStat").textContent=streak;
-  document.getElementById("progressBar").style.width=Math.min(100,(xp%1000)/10)+"%";
+  document.getElementById("progressBar").style.width=Math.min(100,(xp/1000)*100)+"%";
 
-  if(xp>=1000){
-    level++;
-    xp=xp-1000;
-    document.getElementById("level").textContent=level;
-    document.getElementById("xp").textContent=xp;
-    document.getElementById("xpStat").textContent=xp;
+  if(mysteryOpened){
+    document.getElementById("mysteryAchievement").classList.remove("locked");
   }
+  if(quizCompleted){
+    document.getElementById("quizAchievement").classList.remove("locked");
+  }
+
+  updateRewardUI();
+  saveProgress();
 }
 
 async function login(){
@@ -526,6 +603,8 @@ async function login(){
     }
 
     currentMember=data;
+    memberCode=code;
+    loadProgress();
 
     const name=data.username||"medlem";
     memberName.textContent=name;
@@ -536,7 +615,6 @@ async function login(){
     memberCard.classList.remove("hidden");
 
     updateDashboard();
-
   }catch(e){
     console.error(e);
     showError("Kunde inte kontrollera koden. Försök igen.");
@@ -552,43 +630,51 @@ document.getElementById("logoutBtn").onclick=()=>{
   codeInput.value="";
   error.className="hidden";
   currentMember=null;
+  memberCode="";
 };
 
 document.getElementById("rewardBtn").onclick=()=>{
-  const btn=document.getElementById("rewardBtn");
-
-  if(btn.dataset.claimed==="yes"){
-    document.getElementById("rewardBox").textContent="✅ Du har redan hämtat dagens reward!";
+  const last=localStorage.getItem(storageKey()+"_lastReward");
+  if(last===today()){
+    updateRewardUI();
     return;
   }
 
-  xp+=50;
-  streak++;
-  btn.dataset.claimed="yes";
-  btn.textContent="✅ REWARD HÄMTAD";
-  document.getElementById("rewardBox").innerHTML="🎉 Du fick <b>+50 XP</b>!";
+  const reward=50+(rewardClaims*20);
+  const previousLast=last;
+
+  if(previousLast===yesterday()){
+    streak++;
+  }else{
+    streak=1;
+  }
+
+  xp+=reward;
+  rewardClaims++;
+  localStorage.setItem(storageKey()+"_lastReward",today());
+
+  document.getElementById("rewardBox").innerHTML="🎉 Du fick <b>+"+reward+" XP</b>!<br><small>Imorgon blir rewarden <b>+"+(50+rewardClaims*20)+" XP</b>.</small>";
+  document.getElementById("rewardBtn").disabled=true;
   updateDashboard();
 };
 
 document.getElementById("mysteryBtn").onclick=()=>{
+  if(mysteryOpened)return;
   const rewards=[25,50,75,100,150];
   const reward=rewards[Math.floor(Math.random()*rewards.length)];
 
   xp+=reward;
   mysteryOpened=true;
 
-  document.getElementById("mysteryBtn").textContent="🎉 +"+reward+" XP";
+  document.getElementById("mysteryBtn").textContent="🎉 +"+reward+" XP — ÖPPNAD";
+  document.getElementById("mysteryBtn").disabled=true;
   document.getElementById("mysteryAchievement").classList.remove("locked");
-
   updateDashboard();
 };
 
 document.getElementById("voteBtn").onclick=()=>{
   const choice=prompt("🗳️ Vad vill du se mer av på PixelOlofs hemsida?\n\n1 = Minecraft\n2 = Challenges\n3 = Community");
-
-  if(choice){
-    alert("✅ Din röst är registrerad!");
-  }
+  if(choice)alert("✅ Din röst är registrerad!");
 };
 
 document.getElementById("secretBtn").onclick=()=>{
@@ -596,36 +682,14 @@ document.getElementById("secretBtn").onclick=()=>{
 };
 
 const quiz=[
-  {
-    q:"Vilken mob exploderar när den kommer nära spelaren?",
-    answers:["Creeper","Zombie","Skeleton","Spider"],
-    correct:0
-  },
-  {
-    q:"Vilken malm behövs för att göra en Nether Portal?",
-    answers:["Järn","Diamant","Obsidian","Kol"],
-    correct:2
-  },
-  {
-    q:"Vad heter bossen i The End?",
-    answers:["Warden","Ender Dragon","Wither","Guardian"],
-    correct:1
-  }
+  {q:"Vilken mob exploderar när den kommer nära spelaren?",answers:["Creeper","Zombie","Skeleton","Spider"],correct:0},
+  {q:"Vilken malm behövs för att göra en Nether Portal?",answers:["Järn","Diamant","Obsidian","Kol"],correct:2},
+  {q:"Vad heter bossen i The End?",answers:["Warden","Ender Dragon","Wither","Guardian"],correct:1}
 ];
-
-let quizIndex=0;
-
-document.getElementById("quizStartBtn").onclick=()=>{
-  quizIndex=0;
-  document.getElementById("quizBox").classList.remove("hidden");
-  showQuestion();
-  document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
-};
 
 function showQuestion(){
   const item=quiz[quizIndex];
   document.getElementById("quizQuestion").textContent=item.q;
-
   const options=document.getElementById("quizOptions");
   options.innerHTML="";
 
@@ -640,7 +704,16 @@ function showQuestion(){
   document.getElementById("quizResult").classList.add("hidden");
 }
 
+document.getElementById("quizStartBtn").onclick=()=>{
+  if(quizCompleted)return;
+  quizIndex=0;
+  document.getElementById("quizBox").classList.remove("hidden");
+  showQuestion();
+  document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
+};
+
 function answerQuiz(index){
+  if(quizCompleted)return;
   const item=quiz[quizIndex];
   const result=document.getElementById("quizResult");
 
@@ -648,8 +721,6 @@ function answerQuiz(index){
     xp+=50;
     result.textContent="✅ Rätt! +50 XP";
     result.classList.remove("hidden");
-    updateDashboard();
-
     quizIndex++;
 
     if(quizIndex>=quiz.length){
@@ -657,9 +728,13 @@ function answerQuiz(index){
       document.getElementById("quizAchievement").classList.remove("locked");
       document.getElementById("quizQuestion").textContent="🏆 Quiz Master! Du klarade hela quizet!";
       document.getElementById("quizOptions").innerHTML="";
+      document.getElementById("quizStartBtn").disabled=true;
+      document.getElementById("quizStartBtn").textContent="🏆 QUIZ KLARAT";
+      updateDashboard();
       return;
     }
 
+    updateDashboard();
     setTimeout(showQuestion,700);
   }else{
     result.textContent="❌ Inte riktigt! Försök igen.";
