@@ -81,6 +81,21 @@ button:hover,.btn:hover{transform:translateY(-2px)}
 .secondary{background:#162119;color:#eaffed;border:1px solid var(--line)}
 .logout{background:#151c17;color:#ddd;border:1px solid #26352a}
 .hidden{display:none!important}
+
+.mode-switch{display:flex;gap:10px;margin:18px 0 4px}
+.mode-switch button{flex:1}
+.mode-switch .active{background:var(--green);color:#061008}
+.admin-card{border-color:rgba(255,215,80,.35);background:linear-gradient(145deg,rgba(38,30,8,.96),rgba(12,12,7,.96))}
+.admin-badge{display:inline-block;background:rgba(255,215,80,.12);border:1px solid rgba(255,215,80,.35);color:#ffe66d;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:900}
+.secret-room{margin-top:20px;padding:28px;border-radius:20px;border:1px solid rgba(180,110,255,.35);background:radial-gradient(circle at 50% 0,rgba(130,70,220,.16),transparent 55%),#0b0712;text-align:center}
+.secret-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.secret-item{padding:18px;border:1px solid rgba(180,110,255,.25);border-radius:16px;background:#100b18}
+.secret-item b{display:block;margin-bottom:5px}
+.quest{margin-top:18px;padding:20px;border-radius:18px;background:#0a120c;border:1px solid var(--line)}
+.quest-row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid rgba(110,255,139,.08)}
+.quest-row:last-child{border-bottom:0}
+.quest-row small{color:var(--muted)}
+@media(max-width:700px){.secret-grid{grid-template-columns:1fr}}
 .error{
   margin-top:12px;
   padding:13px;
@@ -261,11 +276,24 @@ footer strong{color:var(--green)}
   <div class="logo">PIXEL<span>OLOF</span> 👑</div>
 
   <div id="loginCard" class="card login-card">
-    <span class="badge">🔐 MEMBERS ONLY</span>
-    <h1>Medlemsområde</h1>
-    <p>Skriv din medlemskod för att öppna din exklusiva dashboard.</p>
+    <span class="badge">🔐 PIXELOLOF MEMBERS</span>
+    <h1 id="loginTitle">Medlemsområde</h1>
+    <p id="loginDescription">Logga in med din medlemskod för att öppna din exklusiva dashboard.</p>
 
-    <input id="code" placeholder="PX-XXXX-XXXX" autocomplete="off">
+    <div class="mode-switch">
+      <button id="memberModeBtn" class="secondary active">👑 MEDLEM</button>
+      <button id="adminModeBtn" class="secondary">🛡️ ADMIN</button>
+    </div>
+
+    <div id="memberLoginFields">
+      <input id="code" placeholder="PX-XXXX-XXXX" autocomplete="off">
+    </div>
+
+    <div id="adminLoginFields" class="hidden">
+      <input id="adminUsername" placeholder="Admin-användarnamn" autocomplete="username">
+      <input id="adminPassword" type="password" placeholder="Admin-lösenord" autocomplete="current-password">
+    </div>
+
     <button id="loginBtn" class="primary">👑 LOGGA IN</button>
     <div id="error" class="hidden"></div>
   </div>
@@ -380,6 +408,29 @@ footer strong{color:var(--green)}
       </div>
     </div>
 
+    <div id="secretRoom" class="card hidden admin-card">
+      <div class="secret-room">
+        <span class="admin-badge">🔓 SECRET ROOM UNLOCKED</span>
+        <h2 style="margin-top:10px">🕳️ The Pixel Vault</h2>
+        <p>Här finns exklusiva saker som bara upplåsta medlemmar och admin kan se.</p>
+        <div class="secret-grid">
+          <div class="secret-item"><b>💎 Diamond Vault</b><small>Legendarisk member-status.</small></div>
+          <div class="secret-item"><b>👑 Pixel Crown</b><small>En unik titel för Pixel Legend.</small></div>
+          <div class="secret-item"><b>⚡ Admin Core</b><small>Admin har alla funktioner upplåsta.</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Daily Quests</h2>
+      <p>Små uppdrag som gör member-zonen roligare.</p>
+      <div class="quest">
+        <div class="quest-row"><div><b>🎁 Hämta dagens reward</b><br><small>+ dagens XP</small></div><span>DAILY</span></div>
+        <div class="quest-row"><div><b>🎲 Öppna Mystery Box</b><br><small>+ mystery reward</small></div><span>ONCE</span></div>
+        <div class="quest-row"><div><b>🧩 Klara Minecraft Quiz</b><br><small>+ 150 XP totalt</small></div><span>ONCE</span></div>
+      </div>
+    </div>
+
     <div class="card">
       <h2>🏆 Achievements</h2>
       <p>Lås upp achievements när du använder member-funktionerna.</p>
@@ -405,14 +456,19 @@ footer strong{color:var(--green)}
           <small>Klara Minecraft-quizet.</small>
         </div>
 
-        <div class="achievement locked">
+        <div class="achievement locked" id="diamondMemberAchievement">
           <b>💎 Diamond Member</b>
-          <small>Nå en högre member-level.</small>
+          <small>Nå level 5.</small>
         </div>
 
-        <div class="achievement locked">
+        <div class="achievement locked" id="diamondLegendAchievement">
+          <b>💎✨ Diamond Legend</b>
+          <small>Nå level 10.</small>
+        </div>
+
+        <div class="achievement locked" id="pixelLegendAchievement">
           <b>👑 Pixel Legend</b>
-          <small>Lås upp den legendariska nivån.</small>
+          <small>Nå level 20.</small>
         </div>
       </div>
     </div>
@@ -453,6 +509,7 @@ footer strong{color:var(--green)}
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getFirestore,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getAuth,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtVV5fDpqiL-emhQ75yD_dTZtkhbYZCzk",
@@ -465,6 +522,7 @@ const firebaseConfig = {
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+const auth=getAuth(app);
 
 const codeInput=document.getElementById("code");
 const error=document.getElementById("error");
@@ -481,6 +539,8 @@ let rewardClaims=0;
 let mysteryOpened=false;
 let quizCompleted=false;
 let quizIndex=0;
+let isAdmin=false;
+let loginMode="member";
 
 function storageKey(){
   return "pixelolof_member_" + memberCode;
@@ -573,12 +633,81 @@ function updateDashboard(){
     document.getElementById("quizAchievement").classList.remove("locked");
   }
 
+  if(level>=5){
+    document.getElementById("diamondMemberAchievement").classList.remove("locked");
+  }
+  if(level>=10){
+    document.getElementById("diamondLegendAchievement").classList.remove("locked");
+  }
+  if(level>=20){
+    document.getElementById("pixelLegendAchievement").classList.remove("locked");
+  }
+
   updateRewardUI();
   saveProgress();
 }
 
+function setLoginMode(mode){
+  loginMode=mode;
+  const member=mode==="member";
+  document.getElementById("memberModeBtn").classList.toggle("active",member);
+  document.getElementById("adminModeBtn").classList.toggle("active",!member);
+  document.getElementById("memberLoginFields").classList.toggle("hidden",!member);
+  document.getElementById("adminLoginFields").classList.toggle("hidden",member);
+  document.getElementById("loginTitle").textContent=member?"Medlemsområde":"Admin-inloggning";
+  document.getElementById("loginDescription").textContent=member?"Logga in med din medlemskod för att öppna din exklusiva dashboard.":"Logga in med ditt PixelOlof-adminkonto.";
+  document.getElementById("loginBtn").textContent=member?"👑 LOGGA IN":"🛡️ ADMIN LOGGA IN";
+  error.className="hidden";
+}
+
+function unlockEverythingForAdmin(){
+  isAdmin=true;
+  xp=99999;
+  level=99;
+  streak=999;
+  rewardClaims=999;
+  mysteryOpened=true;
+  quizCompleted=true;
+  document.getElementById("secretRoom").classList.remove("hidden");
+  document.querySelectorAll(".achievement").forEach(x=>x.classList.remove("locked"));
+  document.getElementById("mysteryBtn").textContent="👑 ADMIN — ALLT UPPLÅST";
+  document.getElementById("mysteryBtn").disabled=true;
+  document.getElementById("quizStartBtn").textContent="👑 ADMIN — QUIZ UPPLÅST";
+  document.getElementById("quizStartBtn").disabled=true;
+  document.getElementById("rewardBtn").textContent="👑 ADMIN — ALLA REWARDS UPPLÅSTA";
+  document.getElementById("rewardBtn").disabled=true;
+  document.getElementById("memberName").textContent="PixelOlof";
+  document.getElementById("profileName").textContent="PixelOlof ADMIN";
+  document.getElementById("avatar").textContent="👑";
+  document.querySelector(".hero .badge").textContent="🛡️ ADMIN • ALLT UPPLÅST";
+  document.querySelector(".hero .badge").classList.add("admin-badge");
+  document.querySelector(".hero p").textContent="Admin-dashboard • alla levels, rewards, badges och Secret Room är upplåsta.";
+  updateDashboard();
+}
+
+document.getElementById("memberModeBtn").onclick=()=>setLoginMode("member");
+document.getElementById("adminModeBtn").onclick=()=>setLoginMode("admin");
+
+async function adminLogin(){
+  const username=document.getElementById("adminUsername").value.trim();
+  const password=document.getElementById("adminPassword").value;
+  if(username!=="PixelOlof"){showError("Fel admin-användarnamn.");return;}
+  if(!password){showError("Skriv admin-lösenordet.");return;}
+  try{
+    await signInWithEmailAndPassword(auth,"pixeln10@tuta.io",password);
+    memberCode="ADMIN";
+    loginCard.classList.add("hidden");
+    memberCard.classList.remove("hidden");
+    unlockEverythingForAdmin();
+  }catch(e){
+    console.error(e);
+    showError("Fel admin-lösenord eller inloggning.");
+  }
+}
+
 async function login(){
   error.className="hidden";
+  if(loginMode==="admin"){ await adminLogin(); return; }
 
   const code=codeInput.value.trim().toUpperCase();
 
@@ -623,8 +752,11 @@ async function login(){
 
 document.getElementById("loginBtn").onclick=login;
 codeInput.onkeydown=e=>{if(e.key==="Enter")login()};
+document.getElementById("adminPassword").onkeydown=e=>{if(e.key==="Enter")login()};
 
-document.getElementById("logoutBtn").onclick=()=>{
+document.getElementById("logoutBtn").onclick=async()=>{
+  if(isAdmin){try{await signOut(auth)}catch(e){console.error(e)}}
+  isAdmin=false;
   memberCard.classList.add("hidden");
   loginCard.classList.remove("hidden");
   codeInput.value="";
@@ -678,7 +810,8 @@ document.getElementById("voteBtn").onclick=()=>{
 };
 
 document.getElementById("secretBtn").onclick=()=>{
-  alert("🔐 Secret Room\n\nHär kan du senare lägga exklusiva bilder, hemliga koder eller annat member-innehåll!");
+  document.getElementById("secretRoom").classList.remove("hidden");
+  document.getElementById("secretRoom").scrollIntoView({behavior:"smooth"});
 };
 
 const quiz=[
