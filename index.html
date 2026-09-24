@@ -1,1 +1,532 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelOlof | Minecraft</title>
+<meta name="description" content="PixelOlofs Minecraft-hemsida med gaming, community och exklusiva medlemsfunktioner.">
 
+<style>
+:root{
+  --bg:#060a07;
+  --panel:#0d160f;
+  --panel2:#111d13;
+  --green:#42e66a;
+  --green2:#20a94a;
+  --text:#f2fff4;
+  --muted:#9caf9f;
+  --line:rgba(110,255,139,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 5%,rgba(66,230,106,.13),transparent 28%),
+    radial-gradient(circle at 85% 30%,rgba(32,169,74,.08),transparent 25%),
+    linear-gradient(180deg,#050805,#09100a 45%,#060906);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.045;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:42px 42px;
+  z-index:-1;
+}
+a{text-decoration:none;color:inherit}
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 6%;
+  background:rgba(5,9,6,.9);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.logo{
+  font-weight:1000;
+  letter-spacing:2px;
+  font-size:20px;
+}
+.logo span{color:var(--green)}
+.navlinks{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.navlinks a{
+  padding:9px 13px;
+  border-radius:10px;
+  color:#cfe4d2;
+  font-size:13px;
+  font-weight:800;
+  transition:.2s;
+}
+.navlinks a:hover{
+  background:rgba(66,230,106,.1);
+  color:var(--green);
+  transform:translateY(-2px);
+}
+
+.hero{
+  min-height:720px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:90px 20px;
+  position:relative;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:460px;
+  height:460px;
+  border-radius:50%;
+  background:rgba(66,230,106,.12);
+  filter:blur(100px);
+  z-index:-1;
+}
+.badge{
+  display:inline-block;
+  padding:8px 14px;
+  border:1px solid rgba(66,230,106,.3);
+  background:rgba(66,230,106,.08);
+  border-radius:999px;
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(58px,12vw,140px);
+  line-height:.9;
+  letter-spacing:-7px;
+  font-weight:1000;
+  text-shadow:0 10px 40px rgba(0,0,0,.55);
+}
+.hero h1 span{
+  color:var(--green);
+  text-shadow:0 0 35px rgba(66,230,106,.25);
+}
+.hero p{
+  max-width:680px;
+  margin:28px auto;
+  color:var(--muted);
+  font-size:18px;
+}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:13px 19px;
+  border-radius:12px;
+  font-weight:900;
+  font-size:14px;
+  border:1px solid var(--line);
+  transition:.2s;
+}
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.btn-green{
+  background:var(--green);
+  color:#061008;
+  border-color:var(--green);
+}
+.btn-dark{
+  background:#101a12;
+  color:#eaffed;
+}
+
+section{
+  max-width:1120px;
+  margin:auto;
+  padding:90px 22px;
+}
+.section-title{margin-bottom:34px}
+.section-title small{
+  color:var(--green);
+  font-weight:900;
+  letter-spacing:2px;
+}
+.section-title h2{
+  font-size:46px;
+  line-height:1.1;
+  margin-top:7px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.card{
+  background:linear-gradient(145deg,rgba(17,28,20,.94),rgba(9,16,11,.94));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 20px 70px rgba(0,0,0,.35);
+  transition:.25s;
+}
+.card:hover{
+  transform:translateY(-7px);
+  border-color:rgba(66,230,106,.42);
+}
+.icon{
+  font-size:34px;
+  margin-bottom:16px;
+}
+.card h3{
+  font-size:22px;
+  margin-bottom:8px;
+}
+.card p{color:var(--muted)}
+
+.minecraft{
+  padding:55px 30px;
+  text-align:center;
+  border-radius:28px;
+  border:1px solid rgba(66,230,106,.25);
+  background:
+    linear-gradient(rgba(10,24,13,.84),rgba(8,15,9,.94)),
+    repeating-linear-gradient(0deg,transparent 0 39px,rgba(66,230,106,.04) 40px),
+    repeating-linear-gradient(90deg,transparent 0 39px,rgba(66,230,106,.04) 40px);
+  box-shadow:0 20px 70px rgba(0,0,0,.4);
+}
+.minecraft h2{
+  font-size:48px;
+  margin-bottom:12px;
+}
+.minecraft p{
+  max-width:680px;
+  margin:0 auto 25px;
+  color:var(--muted);
+}
+
+.member-preview{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:20px;
+}
+.member-main,.member-side{
+  background:linear-gradient(145deg,#0e1911,#091009);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:30px;
+}
+.member-main h3{
+  font-size:30px;
+  margin-bottom:10px;
+}
+.member-main p,.member-side p{color:var(--muted)}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:24px 0;
+}
+.stat{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(66,230,106,.04);
+}
+.stat b{
+  display:block;
+  font-size:22px;
+  color:var(--green);
+}
+.stat span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.feature-list{
+  display:grid;
+  gap:10px;
+  margin:18px 0 24px;
+}
+.feature{
+  padding:13px 15px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.02);
+}
+
+.community{
+  text-align:center;
+  padding:55px 25px;
+  border-radius:26px;
+  background:linear-gradient(135deg,#0d1b10,#09110b);
+  border:1px solid var(--line);
+}
+.community p{
+  color:var(--muted);
+  max-width:650px;
+  margin:10px auto 25px;
+}
+
+.chat-button{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--green);
+  color:#061008;
+  font-size:25px;
+  box-shadow:0 10px 35px rgba(66,230,106,.25);
+  z-index:999;
+  transition:.2s;
+}
+.chat-button:hover{
+  transform:scale(1.1) rotate(3deg);
+}
+
+footer{
+  text-align:center;
+  padding:45px 20px;
+  color:#6e7d71;
+  border-top:1px solid var(--line);
+}
+footer strong{color:var(--green)}
+
+@media(max-width:800px){
+  nav{padding:13px 15px}
+  .navlinks a{font-size:11px;padding:7px}
+  .hero{min-height:620px}
+  .hero h1{letter-spacing:-4px}
+  .grid,.member-preview{grid-template-columns:1fr}
+  .section-title h2{font-size:37px}
+  .minecraft h2{font-size:36px}
+}
+@media(max-width:520px){
+  .navlinks a:nth-child(1),
+  .navlinks a:nth-child(2){display:none}
+  .hero p{font-size:16px}
+  .stats{grid-template-columns:1fr}
+  .chat-button{
+    width:56px;
+    height:56px;
+    right:14px;
+    bottom:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">PIXEL<span>OLOF</span></div>
+
+  <div class="navlinks">
+    <a href="#minecraft">⛏️ MINECRAFT</a>
+    <a href="#gaming">🎮 GAMING</a>
+    <a href="members.html">👑 MEDLEMMAR</a>
+    <a href="#community">💬 COMMUNITY</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="badge">⛏️ PIXELOLOF MINECRAFT</div>
+
+    <h1>PIXEL<span>OLOF</span></h1>
+
+    <p>
+      Välkommen till PixelOlofs Minecraft-hemsida.
+      Utforska gaming, community och en exklusiv medlemsdel
+      full av roliga funktioner.
+    </p>
+
+    <div class="buttons">
+      <a class="btn btn-green" href="#minecraft">⛏️ UTFORSKA</a>
+      <a class="btn btn-dark" href="members.html">👑 BLI MEMBER</a>
+    </div>
+  </div>
+</header>
+
+<section id="minecraft">
+  <div class="minecraft">
+    <h2>⛏️ MINECRAFT</h2>
+
+    <p>
+      Bygg, utforska och skapa. Hela hemsidan har en
+      Minecraft-inspirerad känsla för PixelOlofs community.
+    </p>
+
+    <div class="buttons">
+      <a class="btn btn-green" href="#gaming">🎮 GAMING</a>
+      <a class="btn btn-dark" href="members.html">🔐 MEMBER-ZON</a>
+    </div>
+  </div>
+</section>
+
+<section id="gaming">
+  <div class="section-title">
+    <small>GAME ON</small>
+    <h2>Gaming</h2>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">⛏️</div>
+      <h3>Bygg & skapa</h3>
+      <p>
+        En Minecraft-inspirerad plats för kreativitet,
+        byggen och nya idéer.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🧭</div>
+      <h3>Utforska</h3>
+      <p>
+        Upptäck nya delar av sidan och håll koll på
+        framtida community-funktioner.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🏆</div>
+      <h3>Challenges</h3>
+      <p>
+        Roliga utmaningar, achievements och andra
+        saker som kan byggas ut över tid.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="members">
+  <div class="section-title">
+    <small>EXKLUSIVT</small>
+    <h2>Member Zone 👑</h2>
+  </div>
+
+  <div class="member-preview">
+
+    <div class="member-main">
+      <h3>Mer än bara ett medlemskap.</h3>
+
+      <p>
+        Members kan få tillgång till en egen dashboard
+        med funktioner som kan kopplas till Firebase.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <b>⭐ XP</b>
+          <span>Samla erfarenhet</span>
+        </div>
+
+        <div class="stat">
+          <b>🏆 Levels</b>
+          <span>Levla upp</span>
+        </div>
+
+        <div class="stat">
+          <b>🎖️ Badges</b>
+          <span>Lås upp märken</span>
+        </div>
+      </div>
+
+      <a class="btn btn-green" href="members.html">
+        👑 ÖPPNA MEMBERS
+      </a>
+    </div>
+
+    <div class="member-side">
+      <h3>🔥 Funktioner</h3>
+
+      <div class="feature-list">
+        <div class="feature">🎁 Daily Reward</div>
+        <div class="feature">🎲 Mystery Box</div>
+        <div class="feature">🏆 Achievements</div>
+        <div class="feature">🗳️ Member Votes</div>
+        <div class="feature">🧩 Minecraft Quiz</div>
+        <div class="feature">🔐 Secret Room</div>
+      </div>
+
+      <p>
+        Funktionerna kan byggas vidare på i member-systemet.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section id="community">
+  <div class="community">
+
+    <div class="section-title">
+      <small>COMMUNITY</small>
+      <h2>Häng med 💬</h2>
+    </div>
+
+    <p>
+      Snacka med andra och bli en del av PixelOlofs
+      community. Chatten öppnas i en ny flik.
+    </p>
+
+    <div class="buttons">
+      <a
+        class="btn btn-green"
+        href="https://organizations.minnit.chat/904015145198288/c/Main"
+        target="_blank"
+        rel="noopener">
+        💬 ÖPPNA CHAT
+      </a>
+
+      <a class="btn btn-dark" href="members.html">
+        🔐 MEDLEMMAR
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<a
+  class="chat-button"
+  href="https://organizations.minnit.chat/904015145198288/c/Main"
+  target="_blank"
+  rel="noopener"
+  title="Community Chat">
+  💬
+</a>
+
+<footer>
+  <p>
+    © 2026 <strong>PixelOlof</strong> — Minecraft Website
+  </p>
+</footer>
+
+</body>
+</html>
